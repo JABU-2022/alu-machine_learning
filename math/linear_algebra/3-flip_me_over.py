@@ -1,23 +1,14 @@
 #!/usr/bin/env python3
 
-
-"""Function that returns the transpose of a matrix"""
-
+"""FUnction that returns the transpose of a matrix"""
 
 
 def matrix_transpose(matrix):
-    """Get the number of rows and columns in the original matrix"""
-    num_rows = len(matrix)
-    num_columns = len(matrix[0])
-
-
-    """Create a new matrix with swapped dimensions"""
-    transpose = [[0 for _ in range(num_rows) for _ in range(num_columns)]]
-
-
-    for i in range(num_rows):
-        for j in range(num_columns):
-            transpose[j][i] = matrix[i][j]
-
-
+    """Returns the transpose"""
+    transpose = []
+    for i in range(len(matrix[0])):
+        transpose.append([])
+    for row in matrix:
+        for i in range(len(row)):
+            transpose[i].append(row[i])
     return transpose
