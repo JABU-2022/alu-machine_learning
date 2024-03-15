@@ -1,0 +1,26 @@
+#Create Model
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.optimizers import Adam
+
+model_1 = Sequential()
+model_1.add(Dense(16, input_dim=98, activation='relu'))
+model_1.add(Dense(1, activation='sigmoid'))  # Output layer for binary classification
+model_1.compile(optimizer=Adam(), loss='binary_crossentropy', metrics=['accuracy'])
+
+def save_model(model, model_name, save_format='pkl'):
+
+    import os
+
+    model_dir = '/content/drive/MyDrive/saved_models'
+    if not os.path.exists(model_dir):
+        os.makedirs(model_dir)
+
+    # Construct the full path for the model file
+    if save_format == 'pkl':
+        model_path = os.path.join(model_dir, f'{model_1}.pkl')
+        model.save(model_path)
+
+
+# Display the model's architecture
+print(model_1.summary())
