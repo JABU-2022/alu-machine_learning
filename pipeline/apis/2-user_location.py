@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Prints the location of a specific Github user
 """
