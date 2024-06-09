@@ -1,38 +1,42 @@
 #!/usr/bin/env python3
 
+"""
+This module contains a class RNNEncoder
+that encode machine translation"""
 import tensorflow as tf
 
+
 class RNNEncoder(tf.keras.layers.Layer):
+    """class RNNEncoder"""
+
     def __init__(self, vocab, embedding, units, batch):
         super(RNNEncoder, self).__init__()
-        self.batch = batch
+        """class contructor
+        vocab - int size of input vocabulary
+        embedding - dim of embedding vector
+        units -  no. of hidden units in RNN cell
+        batch - batch size int"""
+        self.vocab = vocab
+        self.embed = embedding
         self.units = units
-        self.embedding = tf.keras.layers.Embedding(vocab, embedding)
-        self.gru = tf.keras.layers.GRU(units,
+        self.batch = batch
+        self.embedding = tf.keras.layers.Embedding(input_dim=vocab,
+                                                   output_dim=self.embed)
+        self.gru = tf.keras.layers.GRU(units=units,
+                                       kernel_initializer='glorot_uniform',
                                        return_sequences=True,
-                                       return_state=True,
-                                       recurrent_initializer='glorot_uniform')
+                                       return_state=True)
 
     def initialize_hidden_state(self):
-        return tf.zeros((self.batch, self.units))
+        """
+        initialize hidden states"""
+        return tf.zeros(shape=(self.batch, self.units))
 
     def call(self, x, initial):
+        """
+        x - tensor - (batch, input_seq_len)
+        initial - tensor-(batch, units) - intial hidden state
+        """
         x = self.embedding(x)
         outputs, hidden = self.gru(x, initial_state=initial)
         return outputs, hidden
-
-if __name__ == "__main__":
-    import numpy as np
-
-    encoder = RNNEncoder(1024, 128, 256, 32)
-    print(encoder.batch)
-    print(encoder.units)
-    print(type(encoder.embedding))
-    print(type(encoder.gru))
-
-    initial = encoder.initialize_hidden_state()
-    print(initial)
-    x = tf.convert_to_tensor(np.random.choice(1024, 320).reshape((32, 10)))
-    outputs, hidden = encoder(x, initial)
-    print(outputs)
-    print(hidden)
